@@ -1,0 +1,16 @@
+.vscode
+_dev
+
+__pycache__
+.mypy_cache
+
+dist
+
+.venv
+.idea
+
+.env
+.envrc
+codegen.log
+
+env/
