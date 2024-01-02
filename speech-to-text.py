@@ -1,25 +1,17 @@
-import openai
+from openai import OpenAI
+import glob
+import os
 
-# Set up OpenAI API credentials
-openai.api_key = "YOUR_API_KEY"
+openai_api_key = os.environ.get('OPENAI_API_KEY')
 
-# Read the MP3 file
-with open("path/to/your/file.mp3", "rb") as file:
-    audio_data = file.read()
+# client = OpenAI(api_key=openai_api_key)
+mp3_files = glob.glob('./audios/*.mp3')
 
-# Convert audio to text using the OpenAI API
-response = openai.Completion.create(
-    engine="davinci",
-    prompt=audio_data,
-    max_tokens=100,
-    temperature=0.7,
-    n=1,
-    stop=None,
-)
+print(mp3_files, openai_api_key)
 
-# Get the generated text
-text = response.choices[0].text.strip()
+# audio_file= open("/path/to/file/audio.mp3", "rb")
+# transcript = client.audio.transcriptions.create(
+#   model="whisper-1", 
+#   file=audio_file
+# )
 
-# Save the text or subtitles to a file
-with open("texts/miracles-blind/subtitles.txt", "w") as file:
-    file.write(text)
