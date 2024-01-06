@@ -1,7 +1,7 @@
 import gradio as gr
 
 def transcribe(audio):
-    return f"the audio in text: {audio} !"
+    return audio
 
 # demo = gr.Interface(
 #     fn=greet,
@@ -25,5 +25,5 @@ demo = gr.Interface(
     inputs=gr.Audio(sources=["microphone"]),
     # inputs=gr.Audio(sources="microphone", type="filepath"),
     outputs="text"
-)
+).launch()
 demo.launch()
