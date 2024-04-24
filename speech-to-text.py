@@ -5,7 +5,7 @@ import os
 openai_api_key = os.environ.get('OPENAI_API_KEY')
 
 client = OpenAI()
-audio_names = 'miracle-blind.mp3'
+audio_names = 'wordpress.mp3'
 # audio_names = '*.mp3'
 
 mp3_files = glob.glob(f'./audios/{audio_names}')
