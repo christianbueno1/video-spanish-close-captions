@@ -16,3 +16,6 @@ codegen.log
 env/
 transcriptions/
 spanish-transcriptions/
+
+/audios/*
+/videos/*
