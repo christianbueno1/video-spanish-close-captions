@@ -13,6 +13,8 @@ pip install setuptools
 
 pip install -r requirements.txt
 
+# limit 4096 characters
+
 ```
 ## git
 ```

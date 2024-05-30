@@ -6,7 +6,7 @@ openai_api_key = os.environ.get('OPENAI_API_KEY')
 
 client = OpenAI()
 language = 'es'
-transcription_text = 'wp-themes-es.txt'
+transcription_text = 'cold-call-2.txt'
 # transcription_text = '*.mp3'
 
 transcriptions_files = glob.glob(f'./transcriptions/{transcription_text}')
