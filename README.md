@@ -1,5 +1,9 @@
 ## tips
 ```
+# linux virtual environment
+python -m venv env
+source ./env/bin/activate
+
 pip install instaloader
 pip install openai
 
@@ -13,6 +17,8 @@ pip install setuptools
 
 pip install -r requirements.txt
 
+
+
 # limit 4096 characters
 
 ```
@@ -24,6 +30,7 @@ gcam, git commit -a -m
 
 ## env var
 ```
+# store here your key
 # without quotes
 export OPENAI_API_KEY=hello
 #source ~/.zshrc
@@ -52,6 +59,12 @@ mpv videos/lazy/2024-01-23_10-04-08_UTC.mp4
 ```
 #audio, extract audio from video
 ffmpeg -i videos/wordpress.mp4 audios/wordpress.mp3
+
+# convert aac to mp3
+# f40
+ffmpeg -i audios/gpu-for-video-editing-es.aac -c:v copy -c:a libmp3lame -q:a 2 gpu-for-video-editing-es.mp3
+# or simple
+ffmpeg -i audios/gpu-for-video-editing-es.aac audios/gpu-for-video-editing-es.mp3
 
 #play mp3
 ffplay audios/lazy.mp3
