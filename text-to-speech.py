@@ -6,7 +6,7 @@ openai_api_key = os.environ.get('OPENAI_API_KEY')
 
 client = OpenAI()
 language = 'es'
-transcription_text = 'gpu-for-video-editing-part2.txt'
+transcription_text = 'reporter-combustible-p1.txt'
 # transcription_text = '*.mp3'
 
 # remember after edit the key use zsh or bash

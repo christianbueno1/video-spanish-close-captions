@@ -5,7 +5,7 @@ import os
 openai_api_key = os.environ.get('OPENAI_API_KEY')
 
 client = OpenAI()
-audio_names = 'gpu-for-video-editing-part2-es.mp3'
+audio_names = 'reporter-combustible-p1-es.mp3'
 # audio_names = '*.mp3'
 
 mp3_files = glob.glob(f'./audios/{audio_names}')
