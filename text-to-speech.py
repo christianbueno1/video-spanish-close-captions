@@ -6,7 +6,7 @@ openai_api_key = os.environ.get('OPENAI_API_KEY')
 
 client = OpenAI()
 language = 'es'
-transcription_text = 'reporter-combustible-p1.txt'
+transcription_text = 'mystoryteller-sound-3.txt'
 # transcription_text = '*.mp3'
 
 # remember after edit the key use zsh or bash
@@ -26,8 +26,11 @@ for file in transcriptions_files:
         print(text)
         response = client.audio.speech.create(
             model="tts-1",
-            # voice="alloy",
             voice="echo",
+            # voice="alloy",
+            # voice="nova",
+            # voice="fable",
+            # voice="onyx",
             # voice="shimmer",
             input=text
         )
