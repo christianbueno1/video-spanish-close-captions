@@ -32,6 +32,7 @@ gcam, git commit -a -m
 ```
 # store here your key
 # without quotes
+# OPENAI API
 export OPENAI_API_KEY=hello
 #source ~/.zshrc
 zsh
@@ -69,6 +70,9 @@ yt-dlp -o "~/Downloads/%(id)s.%(ext)s" "https://x.com/onlypanasec/status/1813232
 sudo apt install mpv
 sudo dnf install mpv
 mpv videos/lazy/2024-01-23_10-04-08_UTC.mp4
+
+# run flatpak mpv
+/var/lib/flatpak/exports/bin/io.mpv.Mpv audios/prueba3-1.mp3
 ```
 
 ## audio
