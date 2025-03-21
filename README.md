@@ -91,3 +91,42 @@ ffplay audios/lazy.mp3
 cvlc audios/lazy.mp3
 
 ```
+
+## Update
+```
+# Run the following command to update all packages to their latest versions:
+pip install --upgrade -r requirements.txt
+
+# After updating, you can regenerate the requirements.txt file with the updated package versions by running:
+pip freeze > requirements.txt
+
+```
+
+## Convert to Poetry
+```
+# Initialize in your current directory/project
+poetry init
+# Add dependencies from requirements.txt
+poetry add $(cat requirements.txt | grep -v '^\-e' | cut -d = -f 1 | xargs)
+# or
+poetry add $(cat requirements.txt | awk -F '==' '{print $1}')
+#
+# Update pyproject.toml with specific versions
+# Install dependencies
+poetry install
+
+# dependencies problems
+Because no versions of pydantic match >2.10.6,<2.11.0a1 || >2.11.0a1,<2.11.0a2 || >2.11.0a2,<3.0.0
+ and pydantic (2.11.0a1) depends on pydantic-core (2.28.0), pydantic (>2.10.6,<2.11.0a2 || >2.11.0a2,<3.0.0) requires pydantic-core (2.28.0).
+And because pydantic (2.11.0a2) depends on pydantic-core (2.29.0)
+ and pydantic (2.10.6) depends on pydantic-core (2.27.2), pydantic (>=2.10.6,<3.0.0) requires pydantic-core (2.27.2 || 2.28.0 || 2.29.0).
+So, because video-spanish-close-captions depends on both pydantic (^2.10.6) and pydantic-core (^2.30.0), version solving failed.
+
+```
+
+## Poetry commands
+```
+# run video-spanish-close-captions/speech-to-text.py
+poetry run python video-spanish-close-captions/speech-to-text.py
+
+```
