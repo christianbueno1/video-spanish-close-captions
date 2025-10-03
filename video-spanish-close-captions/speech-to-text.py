@@ -5,7 +5,7 @@ import os
 openai_api_key = os.environ.get('OPENAI_API_KEY')
 
 client = OpenAI()
-audio_names = '2025-06-10-meet-2-part-2.mp3'
+audio_names = 'audio.mp3'
 # audio_names = 'listening-1.mp3'
 # audio_names = '*.mp3'
 
