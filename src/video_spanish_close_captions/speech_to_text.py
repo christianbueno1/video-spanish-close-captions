@@ -1,68 +1,81 @@
+# src/video_spanish_close_captions/speech_to_text.py (renombrado sin guiones)
 from openai import OpenAI
 import glob
 import os
+from pathlib import Path
 
-openai_api_key = os.environ.get('OPENAI_API_KEY')
+def get_openai_client():
+    """Initialize and return OpenAI client."""
+    return OpenAI()
 
-client = OpenAI()
-audio_names = 'audio.mp3'
-# audio_names = 'listening-1.mp3'
-# audio_names = '*.mp3'
+def find_audio_files(pattern='*.mp3', audio_dir='./audios'):
+    """Find audio files matching the pattern."""
+    mp3_files = glob.glob(f'{audio_dir}/{pattern}')
+    print(f"Found {len(mp3_files)} audio files")
+    return mp3_files
 
-mp3_files = glob.glob(f'./audios/{audio_names}')
-print(f"mp3_files: {mp3_files}")
+def transcribe_audio(client, file_path, response_format='srt'):
+    """Transcribe a single audio file."""
+    with open(file_path, "rb") as audio_file:
+        transcript = client.audio.transcriptions.create(
+            model="whisper-1",
+            file=audio_file,
+            response_format=response_format
+        )
+    return transcript
 
-for file in mp3_files:
-    print(file)
-    print(f'Creating the transcription for the file: {file}')
-    audio_file= open(file, "rb")
+def save_transcription(transcription, output_path):
+    """Save transcription to file."""
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     
-    # srt
-    transcript_srt = client.audio.transcriptions.create(
-    model="whisper-1", 
-    file=audio_file,
-    response_format="srt"
-    )
-    transcription_srt = transcript_srt
-
-    # text
-    transcript_text = client.audio.transcriptions.create(
-    model="whisper-1", 
-    file=audio_file,
-    response_format="text"
-    )
-    transcription_text = transcript_text
+    with open(output_path, 'w', encoding='utf-8') as f:
+        f.write(transcription)
     
-    # print(type(transcript) )
-    # print(transcript)
-    print(transcription_srt)
-    print(transcription_text)
+    print(f"Transcription saved: {output_path}")
 
-    print(f"creating the transcription file name")
-    transcription_filename_srt = os.path.basename(file).split('.')[0] + '.srt'
-    transcription_filename_text = os.path.basename(file).split('.')[0] + '.txt'
-    # print(transcription_filename_srt)
+def process_audio_file(client, file_path, output_dir='transcriptions'):
+    """Process a single audio file and save transcriptions."""
+    print(f'Processing: {file_path}')
     
-    # Create the 'transcriptions' directory if it doesn't exist
-    print(f" creating the directory fi it doesn't exist")
-    if not os.path.exists('transcriptions'):
-        os.makedirs('transcriptions')
-
-    transcription_filepath_srt = os.path.join('transcriptions', transcription_filename_srt)
-    transcription_filepath_text = os.path.join('transcriptions', transcription_filename_text)
+    base_name = Path(file_path).stem
     
-    # print(transcription_filepath_srt)
+    # Transcribe to SRT
+    transcript_srt = transcribe_audio(client, file_path, 'srt')
+    srt_path = Path(output_dir) / f'{base_name}.srt'
+    save_transcription(transcript_srt, srt_path)
+    
+    # Transcribe to text
+    transcript_text = transcribe_audio(client, file_path, 'text')
+    txt_path = Path(output_dir) / f'{base_name}.txt'
+    save_transcription(transcript_text, txt_path)
+    
+    return srt_path, txt_path
 
-    print(f"writing the transcription to the file")
-    with open(transcription_filepath_srt, 'w') as f:
-        f.write(transcription_srt)
+def main(audio_pattern='audio.mp3', audio_dir='./audios', output_dir='transcriptions'):
+    """Main function to process all matching audio files."""
+    client = get_openai_client()
+    audio_files = find_audio_files(audio_pattern, audio_dir)
+    
+    results = []
+    for file_path in audio_files:
+        try:
+            srt_path, txt_path = process_audio_file(client, file_path, output_dir)
+            results.append({
+                'audio': file_path,
+                'srt': srt_path,
+                'txt': txt_path,
+                'status': 'success'
+            })
+        except Exception as e:
+            print(f"Error processing {file_path}: {e}")
+            results.append({
+                'audio': file_path,
+                'status': 'error',
+                'error': str(e)
+            })
+    
+    return results
 
-    with open(transcription_filepath_text, 'w') as f:
-        f.write(transcription_text)
-
-    print(f"Transcription file saved at: {transcription_filepath_srt}")
-    print(f"Transcription file saved at: {transcription_filepath_text}")
-
-
-    def main(audio_file: str) ->:
-        pass
+if __name__ == "__main__":
+    main()
