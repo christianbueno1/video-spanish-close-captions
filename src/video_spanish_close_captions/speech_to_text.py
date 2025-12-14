@@ -62,3 +62,7 @@ for file in mp3_files:
 
     print(f"Transcription file saved at: {transcription_filepath_srt}")
     print(f"Transcription file saved at: {transcription_filepath_text}")
+
+
+    def main(audio_file: str) ->:
+        pass
