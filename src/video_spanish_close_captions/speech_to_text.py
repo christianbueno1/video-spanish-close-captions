@@ -8,13 +8,13 @@ def get_openai_client():
     """Initialize and return OpenAI client."""
     return OpenAI()
 
-def find_audio_files(pattern='*.mp3', audio_dir='./audios'):
+def find_audio_files(pattern: str='*.mp3', audio_dir: str='./audios'):
     """Find audio files matching the pattern."""
     mp3_files = glob.glob(f'{audio_dir}/{pattern}')
     print(f"Found {len(mp3_files)} audio files")
     return mp3_files
 
-def transcribe_audio(client, file_path, response_format='srt'):
+def transcribe_audio(client: OpenAI, file_path: str, response_format: str='srt'):
     """Transcribe a single audio file."""
     with open(file_path, "rb") as audio_file:
         transcript = client.audio.transcriptions.create(
