@@ -1,5 +1,8 @@
 # src/video_spanish_close_captions/speech_to_text.py (renombrado sin guiones)
 from openai import OpenAI
+from openai.types.audio import Transcription
+from typing import Literal
+# from typing import BinaryIO, Literal
 import glob
 import os
 from pathlib import Path
@@ -14,27 +17,31 @@ def find_audio_files(pattern: str='*.mp3', audio_dir: str='./audios'):
     print(f"Found {len(mp3_files)} audio files")
     return mp3_files
 
-def transcribe_audio(client: OpenAI, file_path: str, response_format: str='srt'):
+def transcribe_audio(client: OpenAI, file_path: str, response_format: Literal['json', 'srt', 'text'] ='json') -> Transcription | str:
     """Transcribe a single audio file."""
     with open(file_path, "rb") as audio_file:
-        transcript = client.audio.transcriptions.create(
-            model="whisper-1",
+        transcript: Transcription | str = client.audio.transcriptions.create(
+            # model="whisper-1",
+            model="gpt-4o-transcribe",
             file=audio_file,
             response_format=response_format
         )
     return transcript
 
-def save_transcription(transcription, output_path):
+def save_transcription(transcription: Transcription | str, output_path: str | Path):
     """Save transcription to file."""
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     
     with open(output_path, 'w', encoding='utf-8') as f:
-        f.write(transcription)
+        if isinstance(transcription, str):
+            f.write(transcription)
+        else:
+            f.write(transcription.text)
     
     print(f"Transcription saved: {output_path}")
 
-def process_audio_file(client, file_path, output_dir='transcriptions'):
+def process_audio_file(client: OpenAI, file_path: str, output_dir: str='transcriptions'):
     """Process a single audio file and save transcriptions."""
     print(f'Processing: {file_path}')
     
@@ -49,8 +56,13 @@ def process_audio_file(client, file_path, output_dir='transcriptions'):
     transcript_text = transcribe_audio(client, file_path, 'text')
     txt_path = Path(output_dir) / f'{base_name}.txt'
     save_transcription(transcript_text, txt_path)
+
+    # Transcribe to JSON
+    transcript_json = transcribe_audio(client, file_path, 'json')
+    json_path = Path(output_dir) / f'{base_name}.json'
+    save_transcription(transcript_json, json_path)
     
-    return srt_path, txt_path
+    return srt_path, txt_path, json_path
 
 def main(audio_pattern='audio.mp3', audio_dir='./audios', output_dir='transcriptions'):
     """Main function to process all matching audio files."""
