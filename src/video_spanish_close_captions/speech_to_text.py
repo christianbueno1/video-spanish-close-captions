@@ -1,7 +1,7 @@
 # src/video_spanish_close_captions/speech_to_text.py (renombrado sin guiones)
 from openai import OpenAI
 from openai.types.audio import Transcription
-from typing import Literal
+from typing import Literal, TypedDict
 # from typing import BinaryIO, Literal
 import glob
 import os
@@ -64,19 +64,32 @@ def process_audio_file(client: OpenAI, file_path: str, output_dir: str='transcri
     
     return srt_path, txt_path, json_path
 
-def main(audio_pattern='audio.mp3', audio_dir='./audios', output_dir='transcriptions'):
+class ProcessingResult(TypedDict):
+    audio: str
+    srt: Path
+    txt: Path
+    json: Path
+    status: str
+
+class ErrorResult(TypedDict):
+    audio: str
+    status: str
+    error: str
+
+def main(audio_pattern: str='audio.mp3', audio_dir: str='./audios', output_dir: str='transcriptions') -> list[ProcessingResult | ErrorResult]:
     """Main function to process all matching audio files."""
     client = get_openai_client()
     audio_files = find_audio_files(audio_pattern, audio_dir)
     
-    results = []
+    results: list[ProcessingResult | ErrorResult] = []
     for file_path in audio_files:
         try:
-            srt_path, txt_path = process_audio_file(client, file_path, output_dir)
+            srt_path, txt_path, json_path = process_audio_file(client, file_path, output_dir)
             results.append({
                 'audio': file_path,
                 'srt': srt_path,
                 'txt': txt_path,
+                'json': json_path,
                 'status': 'success'
             })
         except Exception as e:
