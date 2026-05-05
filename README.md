@@ -93,6 +93,8 @@ ffmpeg -i simplescreenrecorder-2025-06-16_21.08.35.mkv -c:v libx264 -c:a aac sim
 ffmpeg -i videos/wordpress.mp4 audios/wordpress.mp3
 # extract audio from video from minute 32:44 to end
 ffmpeg -i 2025-06-10-meet-2.mp4 -ss 00:32:44 -c copy 2025-06-10-meet-2-part-2.m4a
+ffmpeg -i ~/Downloads/"¿Dios está de moda 🤨 #dios #fyp #viral #realidad #instagram.mp4" -vn -acodec libmp3lame -q:a 2 audios/dios-esta-de-moda.mp3
+
 
 # convert aac to mp3
 # f40
@@ -119,6 +121,18 @@ done
 
 # convert one segment to mp3
 ffmpeg -i audios/meet-part-1-part001.m4a -c:a libmp3lame -q:a 2 audios/meet-part-1-part001.mp3
+
+# Voy a verificar la duración del archivo de audio en minutos.
+ffprobe -i ~/Music/RECORD20251218112452-ai.mp3 -show_entries format=duration -v quiet -of csv="p=0"
+
+# Sí, es posible dividir el archivo en 3 partes usando ffmpeg. El audio dura aproximadamente 67.7 minutos, así que cada parte tendría unos 22.5 minutos.
+mkdir -p ~/Music/audio-clases-ia
+ffmpeg -i ~/Music/RECORD20251218112452-ai.mp3 -ss 0 -t 1353.87 -acodec copy ~/Music/audio-clases-ia/parte1.mp3
+ffmpeg -i ~/Music/RECORD20251218112452-ai.mp3 -ss 1353.87 -t 1353.87 -acodec copy ~/Music/audio-clases-ia/parte2.mp3
+ffmpeg -i ~/Music/RECORD20251218112452-ai.mp3 -ss 2707.74 -acodec copy ~/Music/audio-clases-ia/parte3.mp3
+ls -lh ~/Music/audio-clases-ia/
+
+
 ```
 
 ## Update
@@ -153,9 +167,8 @@ So, because video-spanish-close-captions depends on both pydantic (^2.10.6) and 
 
 ```
 
-## Poetry commands
-```bash
-# run video-spanish-close-captions/speech-to-text.py
-poetry run python video-spanish-close-captions/speech-to-text.py
 
-```
+## UV commands
+```bash
+# run speech to text
+uv run src/video_spanish_close_captions/speech_to_text.py

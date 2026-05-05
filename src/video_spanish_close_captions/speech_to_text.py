@@ -6,6 +6,9 @@ from typing import Literal, TypedDict
 import glob
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def get_openai_client():
     """Initialize and return OpenAI client."""
@@ -21,8 +24,8 @@ def transcribe_audio(client: OpenAI, file_path: str, response_format: Literal['j
     """Transcribe a single audio file."""
     with open(file_path, "rb") as audio_file:
         transcript: Transcription | str = client.audio.transcriptions.create(
-            # model="whisper-1",
-            model="gpt-4o-transcribe",
+            model="whisper-1",
+            # model="gpt-4o-transcribe",
             file=audio_file,
             response_format=response_format
         )
@@ -103,4 +106,5 @@ def main(audio_pattern: str='audio.mp3', audio_dir: str='./audios', output_dir: 
     return results
 
 if __name__ == "__main__":
-    main()
+    # main()
+    main(audio_pattern='dios-esta-de-moda.mp3', audio_dir='./audios', output_dir='transcriptions')
