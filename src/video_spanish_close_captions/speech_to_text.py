@@ -79,7 +79,7 @@ class ErrorResult(TypedDict):
     status: str
     error: str
 
-def main(audio_pattern: str='audio.mp3', audio_dir: str='./audios', output_dir: str='transcriptions') -> list[ProcessingResult | ErrorResult]:
+def main(audio_pattern: str='*.mp3', audio_dir: str='./audios', output_dir: str='transcriptions') -> list[ProcessingResult | ErrorResult]:
     """Main function to process all matching audio files."""
     client = get_openai_client()
     audio_files = find_audio_files(audio_pattern, audio_dir)
@@ -107,4 +107,5 @@ def main(audio_pattern: str='audio.mp3', audio_dir: str='./audios', output_dir: 
 
 if __name__ == "__main__":
     # main()
-    main(audio_pattern='dios-esta-de-moda.mp3', audio_dir='./audios', output_dir='transcriptions')
+    # main(audio_pattern='dios-esta-de-moda.mp3', audio_dir='./audios', output_dir='transcriptions')
+    main(audio_pattern='*.mp3', audio_dir='./audios', output_dir='transcriptions')
